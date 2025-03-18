@@ -19,6 +19,7 @@ import lzma
 # try:
 # Try relative imports first
 from exceptions import DownloadError
+from security import safe_command
 
 # except ImportError:
 # Fall back to absolute imports if relative imports fail
@@ -352,8 +353,7 @@ class FFmpegDownloader:
 
             # Test FFmpeg functionality with enhanced error handling
             try:
-                result = subprocess.run(
-                    [str(self.ffmpeg_path), "-version"],
+                result = safe_command.run(subprocess.run, [str(self.ffmpeg_path), "-version"],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     timeout=5,
@@ -370,8 +370,7 @@ class FFmpegDownloader:
 
             # Test FFprobe functionality with enhanced error handling
             try:
-                result = subprocess.run(
-                    [str(self.ffprobe_path), "-version"],
+                result = safe_command.run(subprocess.run, [str(self.ffprobe_path), "-version"],
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     timeout=5,

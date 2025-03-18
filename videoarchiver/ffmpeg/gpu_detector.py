@@ -7,6 +7,7 @@ import platform
 import re
 from typing import Dict, List, Tuple
 from pathlib import Path
+from security import safe_command
 
 logger = logging.getLogger("VideoArchiver")
 
@@ -76,7 +77,7 @@ class GPUDetector:
         try:
             # Use PowerShell to get GPU info
             cmd = ["powershell", "-Command", "Get-WmiObject Win32_VideoController | Select-Object Name"]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+            result = safe_command.run(subprocess.run, cmd, capture_output=True, text=True, timeout=10)
             
             if result.returncode == 0:
                 output = result.stdout.lower()
@@ -153,7 +154,7 @@ class GPUDetector:
         
         try:
             cmd = ["system_profiler", "SPDisplaysDataType"]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+            result = safe_command.run(subprocess.run, cmd, capture_output=True, text=True, timeout=10)
             
             if result.returncode == 0:
                 output = result.stdout.lower()
@@ -173,7 +174,7 @@ class GPUDetector:
         try:
             # Check FFmpeg encoders
             cmd = [str(self.ffmpeg_path), "-hide_banner", "-encoders"]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+            result = safe_command.run(subprocess.run, cmd, capture_output=True, text=True, timeout=10)
             
             if result.returncode == 0:
                 output = result.stdout.lower()
@@ -250,7 +251,7 @@ class GPUDetector:
 
             elif system == "windows":
                 cmd = ["powershell", "-Command", "Get-WmiObject Win32_VideoController | Select-Object Name"]
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+                result = safe_command.run(subprocess.run, cmd, capture_output=True, text=True, timeout=10)
                 
                 if result.returncode == 0:
                     for line in result.stdout.splitlines():
@@ -265,7 +266,7 @@ class GPUDetector:
 
             elif system == "darwin":
                 cmd = ["system_profiler", "SPDisplaysDataType"]
-                result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+                result = safe_command.run(subprocess.run, cmd, capture_output=True, text=True, timeout=10)
                 
                 if result.returncode == 0:
                     current_gpu = None

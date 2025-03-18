@@ -11,6 +11,7 @@ from pathlib import Path
 
 from utils.exceptions import VideoVerificationError
 from utils.file_deletion import SecureFileDeleter
+from security import safe_command
 
 logger = logging.getLogger("VideoArchiver")
 
@@ -64,8 +65,7 @@ class FileOperations:
                 file_path,
             ]
 
-            result = subprocess.run(
-                cmd,
+            result = safe_command.run(subprocess.run, cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
@@ -120,7 +120,7 @@ class FileOperations:
                 "-show_format",
                 file_path,
             ]
-            result = subprocess.run(cmd, capture_output=True, text=True)
+            result = safe_command.run(subprocess.run, cmd, capture_output=True, text=True)
             if result.returncode != 0:
                 raise Exception(f"FFprobe failed: {result.stderr}")
 

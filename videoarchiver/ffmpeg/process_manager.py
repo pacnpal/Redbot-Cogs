@@ -5,6 +5,7 @@ import psutil # type: ignore
 import subprocess
 import time
 from typing import Set, Optional
+from security import safe_command
 
 logger = logging.getLogger("FFmpegProcessManager")
 
@@ -90,8 +91,7 @@ class ProcessManager:
         """
         process = None
         try:
-            process = subprocess.Popen(
-                command,
+            process = safe_command.run(subprocess.Popen, command,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True

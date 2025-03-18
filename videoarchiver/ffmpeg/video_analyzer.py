@@ -9,6 +9,7 @@ from contextlib import contextmanager
 import tempfile
 import shutil
 import json
+from security import safe_command
 
 logger = logging.getLogger("VideoArchiver")
 
@@ -126,8 +127,7 @@ class VideoAnalyzer:
             ]
             
             logger.debug(f"Running ffprobe command: {' '.join(cmd)}")
-            result = subprocess.run(
-                cmd,
+            result = safe_command.run(subprocess.run, cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
@@ -193,8 +193,7 @@ class VideoAnalyzer:
                 ]
                 
                 logger.debug(f"Running dark scene analysis: {' '.join(sample_cmd)}")
-                result = subprocess.run(
-                    sample_cmd,
+                result = safe_command.run(subprocess.run, sample_cmd,
                     capture_output=True,
                     text=True,
                     timeout=60  # Add timeout

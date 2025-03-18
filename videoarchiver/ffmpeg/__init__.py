@@ -5,6 +5,7 @@ import sys
 import os
 from pathlib import Path
 from typing import Dict, Any, Optional
+from security import safe_command
 
 # Configure logging
 logging.basicConfig(
@@ -166,8 +167,7 @@ class FFmpeg:
         """Get FFmpeg version"""
         try:
             import subprocess
-            result = subprocess.run(
-                [str(self.ffmpeg_path), "-version"],
+            result = safe_command.run(subprocess.run, [str(self.ffmpeg_path), "-version"],
                 capture_output=True,
                 text=True,
                 timeout=5

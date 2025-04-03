@@ -3,7 +3,6 @@
 import os
 import logging
 import shutil
-import requests
 import tarfile
 import zipfile
 import subprocess
@@ -19,6 +18,7 @@ import lzma
 # try:
 # Try relative imports first
 from exceptions import DownloadError
+from security import safe_requests
 
 # except ImportError:
 # Fall back to absolute imports if relative imports fail
@@ -175,7 +175,7 @@ class FFmpegDownloader:
 
         logger.info(f"Downloading FFmpeg from {url}")
         try:
-            response = requests.get(url, stream=True, timeout=30)
+            response = safe_requests.get(url, stream=True, timeout=30)
             response.raise_for_status()
 
             total_size = int(response.headers.get("content-length", 0))

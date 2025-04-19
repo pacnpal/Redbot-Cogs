@@ -341,14 +341,11 @@ class QueueCleaner:
             metrics_manager.update_cleanup_time()
 
             logger.info(
-                f"Cleanup completed ({mode.value}):\n" +
-                "\n".join(
+                "%s%s%s", f"Cleanup completed ({mode.value}):\n", "\n".join(
                     f"- {phase.value}: {count} items"
                     for phase, count in items_cleaned.items()
                     if count > 0
-                ) +
-                f"\nTotal duration: {duration:.2f}s"
-            )
+                ), f"\nTotal duration: {duration:.2f}s")
 
         except Exception as e:
             logger.error(f"Error during cleanup: {str(e)}")
